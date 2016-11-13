@@ -1,0 +1,15 @@
+{
+  "name": "phobosjs-mongo",
+  "version": "0.0.0",
+  "description": "Use MongoDB as your database in this ORM addon for phobos.js.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Mike Timofiiv (https://fiiv.io)",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2"
+  }
+}
