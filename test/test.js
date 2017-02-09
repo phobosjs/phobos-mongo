@@ -2,12 +2,10 @@
 
 require('dotenv').config()
 
-const chai = require('chai')
+const expect = require('chai').expect
 const _Module = require('../index')
 
 const TEST_MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost/mongotest'
-
-const expect = chai.expect
 
 describe('phobos.js mongodb', () => {
   const DB = new _Module.Store()
