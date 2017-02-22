@@ -28,28 +28,22 @@ describe('phobos.js mongodb', () => {
       attachListener(() => {})
 
       Model.init(store).then(() => {
-        done()
-        // const Billy = new Model({ username: 'Billy' })
+        const Billy = new Model({ username: 'Billy' })
 
-        // Billy.save().then(result => {
-        //   billyId = result.id
-        //   done()
-        // })
+        Billy.save().then(result => {
+          billyId = result._id
+          done()
+        }).catch(console.log)
       })
     })
   })
 
-  // after(done => {
-  //   const queryObject = Model.queryObject({
-  //     type: 'drop-table',
-  //     table: 'models'
-  //   })
-  //
-  //   Model.runQuery(queryObject.query, queryObject.values).then(() => {
-  //     done()
-  //   })
-  // })
-  //
+  after(done => {
+    Model.runQuery({ type: 'drop' }).then(() => {
+      done()
+    })
+  })
+
   it('initializes a Mongo.Db object', () => {
     expect(store).to.be.instanceof(mongo.Db)
   })
@@ -159,32 +153,34 @@ describe('phobos.js mongodb', () => {
       done()
     })
   })
-  //
-  // it('instance#save() with existing model', done => {
-  //   _Module.Model.queryLog = (query, params) => {}
-  //
-  //   Model.one(billyId).then(result => {
-  //     result.username = 'helen'
-  //
-  //     result.save().then(saved => {
-  //       expect(result.username).to.equal('helen')
-  //       expect(result.id).to.equal(billyId)
-  //
-  //       done()
-  //     })
-  //   })
-  // })
-  //
-  // it('instance#delete() with existing model', done => {
-  //   _Module.Model.queryLog = (query, params) => {}
-  //
-  //   Model.one(billyId).then(billy => {
-  //     billy.delete(billyId).then(() => {
-  //       Model.one(billyId).then(result => {
-  //         expect(result).to.deep.equal([])
-  //         done()
-  //       })
-  //     })
-  //   })
-  // })
+
+  it('instance#save() with existing model', done => {
+    _Module.Model.queryLog = (query) => {}
+
+    Model.one(billyId).then(result => {
+      result.username = 'helen'
+
+      result.save().then(saved => {
+        expect(result.username).to.equal('helen')
+        expect(result._id.toString()).to.equal(billyId.toString())
+
+        done()
+      })
+    })
+  })
+
+  it('instance#delete() with existing model', done => {
+    _Module.Model.queryLog = (query) => {}
+
+    Model.one(billyId).then(billy => {
+      billy.delete(billyId).then(wasDeleted => {
+        expect(wasDeleted).to.equal(true)
+
+        Model.one(billyId).then(result => {
+          expect(result).to.deep.equal(null)
+          done()
+        })
+      })
+    })
+  })
 })
