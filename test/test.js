@@ -25,7 +25,7 @@ describe('phobos.js mongodb', () => {
 
       Model.attribute('username', { type: String })
 
-      attachListener(() => {})
+      _Module.Model.queryLog = (query) => {}
 
       Model.init(store).then(() => {
         const Billy = new Model({ username: 'Billy' })
